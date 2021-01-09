@@ -10,7 +10,7 @@ provider:
     minimumCompressionSize: 1024
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
-    MAIN_TABLE: ${self:service}-${opt:stage}-MainTable
+    MAIN_TABLE: $db-${opt:stage}-MainTable
   iamRoleStatements:
     - Effect: "Allow"
       Action:
