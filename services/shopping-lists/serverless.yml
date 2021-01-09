@@ -10,7 +10,7 @@ provider:
     minimumCompressionSize: 1024
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
-    MAIN_TABLE: db-${opt:stage}-MainTable
+    DB_SERVICE: db-${opt:stage}
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -21,7 +21,7 @@ provider:
       Resource:
         Fn::GetAtt:
             #${self:provider.environment.MAIN_TABLE}
-          - ${cf:MainTable}
+          - ${cf:DB_SERVICE.MainTable}
           - Arn
 
 custom:
