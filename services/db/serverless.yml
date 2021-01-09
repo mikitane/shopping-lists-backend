@@ -28,7 +28,10 @@ resources:
         BillingMode: PAY_PER_REQUEST
   Outputs:
     MainTable:
-      Value:
-        "Ref": MainTable
+      Value: !Ref MainTable
       Export:
         Name: MainTable #${self:provider.environment.MAIN_TABLE}
+    MainTable2:
+      Value: !Ref MainTable
+      Export:
+        Name: MainTable2 #${self:provider.environment.MAIN_TABLE}
