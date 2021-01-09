@@ -10,7 +10,8 @@ provider:
     minimumCompressionSize: 1024
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
-    DB_SERVICE: db-${opt:stage}
+    MAIN_TABLE: db-${opt:stage}-MainTable
+
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -19,7 +20,8 @@ provider:
         - dynamodb:GetItem
         - dynamodb:PutItem
       Resource:
-        - ${cf:${self:provider.environment.DB_SERVICE}.MainTableArn}
+        - !ImportValue ${self:provider.environment.MAIN_TABLE}-Arn
+        # - ${cf:${self:provider.environment.DB_SERVICE}.MainTableArn}
 
 custom:
   webpack:

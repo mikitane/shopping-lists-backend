@@ -6,7 +6,7 @@ frameworkVersion: '2.18.0'
 provider:
   name: aws
   environment:
-    MAIN_TABLE: ${self:service}-${opt:stage}-MainTable
+    MAIN_TABLE: $db-${opt:stage}-MainTable
 
 resources:
   Resources:
@@ -30,5 +30,6 @@ resources:
     MainTableArn:
       Value: !GetAtt MainTable.Arn
       Export:
-        Name: MainTableArn #${self:provider.environment.MAIN_TABLE}
+        Name: ${self:provider.environment.MAIN_TABLE}-Arn
+
 
