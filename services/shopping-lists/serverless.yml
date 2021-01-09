@@ -21,7 +21,7 @@ provider:
       Resource:
         Fn::GetAtt:
             #${self:provider.environment.MAIN_TABLE}
-          - ${cf:${self:provider.environment.DB_SERVICE}.MainTable}
+          - MainTable
           - Arn
 
 custom:
