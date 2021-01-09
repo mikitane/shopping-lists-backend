@@ -32,6 +32,6 @@ resources:
       Export:
         Name: MainTable #${self:provider.environment.MAIN_TABLE}
     MainTable2:
-      Value: !Ref MainTable
+      Value: !GetAtt MainTable.Arn
       Export:
         Name: MainTable2 #${self:provider.environment.MAIN_TABLE}
