@@ -19,8 +19,7 @@ provider:
         - dynamodb:GetItem
         - dynamodb:PutItem
       Resource:
-        Fn::GetAtt:
-          - ${cf:${self:provider.environment.DB_SERVICE}.MainTableArn}
+        - ${cf:${self:provider.environment.DB_SERVICE}.MainTableArn}
 
 custom:
   webpack:
