@@ -10,6 +10,7 @@ provider:
     minimumCompressionSize: 1024
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
+    MAIN_TABLE: ${self:service}-${opt:stage}-MainTable
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -19,7 +20,7 @@ provider:
         - dynamodb:PutItem
       Resource:
         Fn::GetAtt:
-          - ${cf:db-${opt:stage}.MainTable}
+          - ${self:provider.environment.MAIN_TABLE}
           - Arn
 
 custom:
