@@ -31,4 +31,4 @@ resources:
       Value:
         "Ref": MainTable
       Export:
-        Name: ${self:provider.environment.MAIN_TABLE}
+        Name: MainTable #${self:provider.environment.MAIN_TABLE}
