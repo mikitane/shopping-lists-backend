@@ -1,0 +1,34 @@
+org: mikitane
+app: shopping-lists-backend
+service: db
+frameworkVersion: '2.18.0'
+
+provider:
+  name: aws
+  environment:
+    MAIN_TABLE: ${self:service}-${opt:stage}-MainTable
+
+resources:
+  Resources:
+    MainTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:provider.environment.MAIN_TABLE}
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+  Outputs:
+    MainTable:
+      Value:
+        "Ref": MainTable
+      Export:
+        Name: MainTable # ${self:provider.environment.MAIN_TABLE}
