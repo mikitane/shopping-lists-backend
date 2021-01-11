@@ -21,6 +21,7 @@ export const createShoppingList: APIGatewayProxyHandler = async () => {
   try {
     await dynamoDB.putItem(params).promise();
   } catch (e) {
+    console.error(e)
     return {
       statusCode: 400,
       body: JSON.stringify({
