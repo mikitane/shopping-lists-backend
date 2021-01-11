@@ -2,7 +2,7 @@ import * as AWS from 'aws-sdk';
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import 'source-map-support/register';
 
-const dynamoDB = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+const dynamoDB = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 
 
 export const getShoppingList: APIGatewayProxyHandler = async (event) => {
@@ -16,13 +16,13 @@ export const getShoppingList: APIGatewayProxyHandler = async (event) => {
   const params = {
     TableName: process.env.MAIN_TABLE,
     Key: {
-      'pk' : {S: uuid},
-      'sk' : {S: uuid}
+      pk: uuid,
+      sk: uuid,
     }
   };
 
   try {
-    const result = await dynamoDB.getItem(params).promise();
+    const result = await dynamoDB.get(params).promise();
     console.log('result', result);
     return {
       statusCode: 200,

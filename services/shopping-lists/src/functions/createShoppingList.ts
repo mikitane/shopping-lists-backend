@@ -3,7 +3,7 @@ import { APIGatewayProxyHandler } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
 import 'source-map-support/register';
 
-const dynamoDB = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+const dynamoDB = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 
 
 export const createShoppingList: APIGatewayProxyHandler = async () => {
@@ -12,14 +12,14 @@ export const createShoppingList: APIGatewayProxyHandler = async () => {
   const params = {
     TableName: process.env.MAIN_TABLE,
     Item: {
-      'pk' : {S: uuid},
-      'sk' : {S: uuid},
-      'name': {S: 'My first shopping list'}
+      pk : uuid,
+      sk : uuid,
+      name: 'My first shopping list',
     }
   };
 
   try {
-    await dynamoDB.putItem(params).promise();
+    await dynamoDB.put(params).promise();
   } catch (e) {
     console.error(e)
     return {
