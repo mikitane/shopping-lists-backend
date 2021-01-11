@@ -12,8 +12,8 @@ export const createShoppingList: APIGatewayProxyHandler = async () => {
   const params = {
     TableName: process.env.MAIN_TABLE,
     Item: {
-      'PK' : {S: uuid},
-      'SK' : {S: uuid},
+      'pk' : {S: uuid},
+      'sk' : {S: uuid},
       'name': {S: 'My first shopping list'}
     }
   };
