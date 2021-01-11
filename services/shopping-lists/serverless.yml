@@ -30,9 +30,14 @@ custom:
     webpackConfig: './webpack.config.js'
     includeModules: true
   region: ${opt:region, self:provider.region}
+  seed:
+    incremental:
+      enabled: true
 
 plugins:
   - serverless-webpack
+  - serverless-offline
+  - serverless-seed
 
 functions:
   createShoppingList:
