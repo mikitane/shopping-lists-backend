@@ -12,7 +12,7 @@ provider:
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
     MAIN_TABLE: db-${opt:stage}-MainTable
-    AWS_REGION: ${self:custom.region}
+    # AWS_REGION: ${self:custom.region}
 
   iamRoleStatements:
     - Effect: "Allow"
