@@ -18,10 +18,10 @@ export const getShoppingList: APIGatewayProxyHandler = async (event) => {
 
   try {
     const result = await dynamoDB.getItem(params).promise();
-
+    console.log(result);
     return {
       statusCode: 200,
-      body: JSON.stringify(result.$response.data, null, 2),
+      body: JSON.stringify(result.$response.data),
     };
   } catch (e) {
     console.error(e)
