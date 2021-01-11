@@ -5,12 +5,14 @@ frameworkVersion: '2.18.0'
 
 provider:
   name: aws
+  region: eu-west-1
   runtime: nodejs12.x
   apiGateway:
     minimumCompressionSize: 1024
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
     MAIN_TABLE: db-${opt:stage}-MainTable
+    AWS_REGION: ${self:custom.region}
 
   iamRoleStatements:
     - Effect: "Allow"
@@ -27,6 +29,7 @@ custom:
   webpack:
     webpackConfig: './webpack.config.js'
     includeModules: true
+  region: ${opt:region, self:provider.region}
 
 plugins:
   - serverless-webpack

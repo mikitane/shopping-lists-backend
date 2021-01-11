@@ -5,6 +5,7 @@ frameworkVersion: '2.18.0'
 
 provider:
   name: aws
+  region: eu-west-1
   environment:
     MAIN_TABLE: db-${opt:stage}-MainTable
 
