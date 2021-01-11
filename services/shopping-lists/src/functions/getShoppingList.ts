@@ -6,7 +6,12 @@ const dynamoDB = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
 
 export const getShoppingList: APIGatewayProxyHandler = async (event) => {
+  console.log('event', event)
+
   const uuid = event.pathParameters.id;
+
+  console.log('uuid', uuid)
+
 
   const params = {
     TableName: process.env.MAIN_TABLE,
