@@ -1,25 +1,28 @@
 import * as AWS from 'aws-sdk';
 import { APIGatewayProxyHandler } from 'aws-lambda';
-import { v4 as uuidv4 } from 'uuid';
 import 'source-map-support/register';
 
 const dynamoDB = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
 
-export const createShoppingList: APIGatewayProxyHandler = async () => {
-  const uuid = uuidv4();
+export const getShoppingList: APIGatewayProxyHandler = async (event) => {
+  const uuid = event.pathParameters.id;
 
   const params = {
     TableName: process.env.MAIN_TABLE,
-    Item: {
+    Key: {
       'pk' : {S: uuid},
-      'sk' : {S: uuid},
-      'name': {S: 'My first shopping list'}
+      'sk' : {S: uuid}
     }
   };
 
   try {
-    await dynamoDB.putItem(params).promise();
+    const result = await dynamoDB.getItem(params).promise();
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result.$response.data, null, 2),
+    };
   } catch (e) {
     console.error(e)
     return {
@@ -29,14 +32,5 @@ export const createShoppingList: APIGatewayProxyHandler = async () => {
       })
     }
   }
-
-
-  return {
-    statusCode: 201,
-    body: JSON.stringify({
-      message: 'Created a new shopping list!',
-      id: uuid,
-    }, null, 2),
-  };
 }
 
