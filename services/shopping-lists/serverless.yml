@@ -32,7 +32,7 @@ plugins:
   - serverless-webpack
 
 functions:
-  createGame:
+  createShoppingList:
     handler: 'src/functions/createShoppingList.createShoppingList'
     events:
       - http:
