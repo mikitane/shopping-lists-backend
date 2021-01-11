@@ -1,7 +1,8 @@
+frameworkVersion: '2.18.0'
+
 org: mikitane
 app: shopping-lists-backend
 service: db
-frameworkVersion: '2.18.0'
 
 provider:
   name: aws
