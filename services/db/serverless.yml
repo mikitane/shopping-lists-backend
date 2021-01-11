@@ -6,7 +6,7 @@ frameworkVersion: '2.18.0'
 provider:
   name: aws
   environment:
-    MAIN_TABLE: $db-${opt:stage}-MainTable
+    MAIN_TABLE: db-${opt:stage}-MainTable
 
 resources:
   Resources:
