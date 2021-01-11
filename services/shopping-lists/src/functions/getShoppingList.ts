@@ -23,6 +23,8 @@ export const getShoppingList: APIGatewayProxyHandler = async (event) => {
 
   try {
     const result = await dynamoDB.get(params).promise();
+    console.log('Result next')
+    console.log(result)
     console.log('result', result);
     console.log('result.ConsumedCapacity', result.ConsumedCapacity);
     console.log('Object.keys(result)', Object.keys(result));
