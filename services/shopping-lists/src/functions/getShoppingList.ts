@@ -36,7 +36,7 @@ export const getShoppingList: APIGatewayProxyHandler = async (event) => {
     return {
       statusCode: 400,
       body: JSON.stringify({
-        message: 'Failed to create a new shopping list'
+        message: 'Failed to create a new shopping list!'
       })
     }
   }
