@@ -1,25 +1,25 @@
-import * as AWS from 'aws-sdk';
+import { DynamoDB } from '@aws-sdk/client-dynamodb'
+import { marshall, unmarshall } from '@aws-sdk/util-dynamodb'
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
 import 'source-map-support/register';
 
-const dynamoDB = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
-
+const dynamoDB = new DynamoDB({apiVersion: '2012-08-10'});
 
 export const createShoppingList: APIGatewayProxyHandler = async () => {
   const uuid = uuidv4();
 
   const params = {
     TableName: process.env.MAIN_TABLE,
-    Item: {
+    Item: marshall({
       pk : uuid,
       sk : uuid,
-      name: 'My first shopping list',
-    }
+      name: 'My first shopping list!',
+    })
   };
 
   try {
-    await dynamoDB.put(params).promise();
+    await dynamoDB.putItem(params);
   } catch (e) {
     console.error(e)
     return {

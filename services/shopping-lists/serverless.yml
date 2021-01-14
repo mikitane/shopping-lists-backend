@@ -53,3 +53,9 @@ functions:
       - http:
           method: get
           path: shopping-list/{id}
+  # updateShoppingList:
+  #   handler: 'src/functions/updateShoppingList.updateShoppingList'
+  #   events:
+  #     - http:
+  #         method: put
+  #         path: shopping-list/{id}
