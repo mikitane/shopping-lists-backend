@@ -4,18 +4,19 @@ import { APIGatewayProxyHandler } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
 import 'source-map-support/register';
 
-const dynamoDB = new DynamoDB({apiVersion: '2012-08-10'});
+const dynamoDB = new DynamoDB({ apiVersion: '2012-08-10' });
 
 export const createShoppingList: APIGatewayProxyHandler = async (event) => {
-  console.log('event', event)
-  const uuid = uuidv4();
+  const data = JSON.parse(event.body);
+  const userId = 'UNKNOWN' // TODO: Authorize user and get id
+  const shoppingListId = uuidv4();
 
   const params = {
     TableName: process.env.MAIN_TABLE,
     Item: marshall({
-      pk : uuid,
-      sk : uuid,
-      name: 'My first shopping list!',
+      pk: `USER#${userId}`,
+      sk: `SHOPPINGLIST#${shoppingListId}`,
+      ...data
     })
   };
 
@@ -31,12 +32,11 @@ export const createShoppingList: APIGatewayProxyHandler = async (event) => {
     }
   }
 
-
   return {
     statusCode: 201,
     body: JSON.stringify({
       message: 'Created a new shopping list!',
-      id: uuid,
+      id: shoppingListId,
     }, null, 2),
   };
 }
