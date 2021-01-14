@@ -6,7 +6,8 @@ import 'source-map-support/register';
 
 const dynamoDB = new DynamoDB({apiVersion: '2012-08-10'});
 
-export const createShoppingList: APIGatewayProxyHandler = async () => {
+export const createShoppingList: APIGatewayProxyHandler = async (event) => {
+  console.log('event', event)
   const uuid = uuidv4();
 
   const params = {
