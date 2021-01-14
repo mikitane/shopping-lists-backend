@@ -1,53 +1,43 @@
+import { DynamoDB } from '@aws-sdk/client-dynamodb'
+import { marshall, unmarshall } from '@aws-sdk/util-dynamodb'
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import 'source-map-support/register';
 
-// const dynamoDB = new AWS.DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
+const dynamoDB = new DynamoDB({ apiVersion: '2012-08-10' });
 
+const handleErrorResponse = (error: Error) => {
+  console.error(error)
+  return {
+    statusCode: 400,
+    body: JSON.stringify({
+      message: 'Failed to retrieve the shopping list'
+    })
+  };
+};
 
-export const getShoppingList: APIGatewayProxyHandler = async () => {
-  // console.log('event', event)
+export const getShoppingList: APIGatewayProxyHandler = async (event) => {
+  const userId = 'UNKNOWN' // TODO: Authorize user and get id
+  const shoppingListId = event.pathParameters.id;
 
-  // const uuid = event.pathParameters.id;
+  const params = {
+    TableName: process.env.MAIN_TABLE,
+    Key: marshall({
+      pk: `USER#${userId}`,
+      sk: `SHOPPINGLIST#${shoppingListId}`,
+    })
+  };
 
-  // console.log('uuid', uuid)
+  let shoppingList = null;
+  try {
+    const { Item } = await dynamoDB.getItem(params);
+    shoppingList = unmarshall(Item);
+  } catch (e) {
+    return handleErrorResponse(e);
+  }
 
-
-  // const params = {
-  //   TableName: process.env.MAIN_TABLE,
-  //   Key: {
-  //     pk: uuid,
-  //     sk: uuid,
-  //   }
-  // };
-
-  // try {
-  //   const result = await dynamoDB.get(params).promise();
-  //   console.log('Result next')
-  //   console.log(result)
-  //   console.log('result', result);
-  //   console.log('result.ConsumedCapacity', result.ConsumedCapacity);
-  //   console.log('Object.keys(result)', Object.keys(result));
-
-  //   return {
-  //     statusCode: 200,
-  //     body: JSON.stringify({
-  //       'result.$response.data': result.$response.data,
-  //       'result': result
-  //     }),
-  //   };
-  // } catch (e) {
-  //   console.error(e)
-  //   return {
-  //     statusCode: 400,
-  //     body: JSON.stringify({
-  //       message: 'Failed to create a new shopping list!'
-  //     })
-  //   }
-  // }
-
-      return {
-      statusCode: 200,
-      body: JSON.stringify({message: "OK"}),
-    };
+  return {
+    statusCode: 200,
+    body: JSON.stringify(shoppingList),
+  };
 }
 
