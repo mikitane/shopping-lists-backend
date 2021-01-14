@@ -4,7 +4,7 @@ import 'source-map-support/register';
 // const dynamoDB = new AWS.DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 
 
-export const getShoppingList: APIGatewayProxyHandler = async (event) => {
+export const getShoppingList: APIGatewayProxyHandler = async () => {
   // console.log('event', event)
 
   // const uuid = event.pathParameters.id;
