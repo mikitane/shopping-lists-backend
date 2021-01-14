@@ -1,28 +1,61 @@
+frameworkVersion: '2.18.0'
+
 org: mikitane
 app: shopping-lists-backend
 service: shopping-lists
-frameworkVersion: '2.18.0'
 
 provider:
   name: aws
+  region: eu-west-1
   runtime: nodejs12.x
   apiGateway:
     minimumCompressionSize: 1024
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
+    MAIN_TABLE: db-${opt:stage}-MainTable
+    # AWS_REGION: ${self:custom.region}
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+      Resource:
+        - !ImportValue ${self:provider.environment.MAIN_TABLE}-Arn
+        # - ${cf:${self:provider.environment.DB_SERVICE}.MainTableArn}
 
 custom:
   webpack:
     webpackConfig: './webpack.config.js'
     includeModules: true
+  region: ${opt:region, self:provider.region}
+  seed:
+    incremental:
+      enabled: true
 
 plugins:
   - serverless-webpack
+  - serverless-offline
+  - serverless-seed
 
 functions:
-  createGame:
+  createShoppingList:
     handler: 'src/functions/createShoppingList.createShoppingList'
     events:
       - http:
           method: post
           path: shopping-list
+  getShoppingList:
+    handler: 'src/functions/getShoppingList.getShoppingList'
+    events:
+      - http:
+          method: get
+          path: shopping-list/{id}
+  # updateShoppingList:
+  #   handler: 'src/functions/updateShoppingList.updateShoppingList'
+  #   events:
+  #     - http:
+  #         method: put
+  #         path: shopping-list/{id}
