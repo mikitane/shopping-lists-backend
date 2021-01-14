@@ -6,8 +6,18 @@ import 'source-map-support/register';
 
 const dynamoDB = new DynamoDB({ apiVersion: '2012-08-10' });
 
+const handleErrorResponse = (error: Error) => {
+  console.error(error)
+  return {
+    statusCode: 400,
+    body: JSON.stringify({
+      message: 'Failed to create a new shopping list'
+    })
+  };
+};
+
 export const createShoppingList: APIGatewayProxyHandler = async (event) => {
-  const data = JSON.parse(event.body);
+  const data = JSON.parse(event.body); // TODO: Validate schema
   const userId = 'UNKNOWN' // TODO: Authorize user and get id
   const shoppingListId = uuidv4();
 
@@ -24,13 +34,7 @@ export const createShoppingList: APIGatewayProxyHandler = async (event) => {
   try {
     await dynamoDB.putItem(params);
   } catch (e) {
-    console.error(e)
-    return {
-      statusCode: 400,
-      body: JSON.stringify({
-        message: 'Failed to create a new shopping list'
-      })
-    }
+    return handleErrorResponse(e);
   }
 
   return {
