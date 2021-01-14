@@ -16,6 +16,7 @@ export const createShoppingList: APIGatewayProxyHandler = async (event) => {
     Item: marshall({
       pk: `USER#${userId}`,
       sk: `SHOPPINGLIST#${shoppingListId}`,
+      id: shoppingListId,
       ...data
     })
   };
