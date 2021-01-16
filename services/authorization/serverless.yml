@@ -1,0 +1,23 @@
+frameworkVersion: '2.18.0'
+
+org: mikitane
+app: shopping-lists-backend
+service: authorization
+
+provider:
+  name: aws
+  region: eu-west-1
+  environment:
+    MAIN_TABLE: db-${opt:stage}-MainTable
+
+resources:
+  Resources:
+    MainUserPool:
+      Type: 'AWS::Cognito::UserPool'
+  Outputs:
+    MainUserPoolArn:
+      Value: !GetAtt MainUserPool.Arn
+      Export:
+        Name: authorization-${opt:stage}-MainUserPool-Arn
+
+
