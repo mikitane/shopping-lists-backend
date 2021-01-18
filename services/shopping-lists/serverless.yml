@@ -47,10 +47,10 @@ functions:
       - http:
           method: post
           path: shopping-list
-          authorizer:
-            name: CognitoAuthorizer
-            type: COGNITO_USER_POOLS
-            arn: !ImportValue auth-${opt:stage}-MainUserPool-Arn
+          # authorizer:
+          #   name: CognitoAuthorizer
+          #   type: COGNITO_USER_POOLS
+          #   arn: !ImportValue auth-${opt:stage}-MainUserPool-Arn
 
   getShoppingList:
     handler: 'src/functions/getShoppingList.getShoppingList'
