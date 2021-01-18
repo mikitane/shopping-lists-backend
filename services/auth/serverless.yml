@@ -14,6 +14,15 @@ resources:
       Type: 'AWS::Cognito::UserPool'
       Properties:
         UserPoolName: ${self:service}-${opt:stage}-MainUserPool
+        AliasAttributes:
+          - phone_number
+          - email
+    MainUserPoolClient:
+      Type: AWS::Cognito::UserPoolClient
+      ClientName: MainUserPoolClient
+      UserPoolId: !Ref MainUserPool
+      GenerateSecret: false
+
   Outputs:
     MainUserPoolArn:
       Value: !GetAtt MainUserPool.Arn
