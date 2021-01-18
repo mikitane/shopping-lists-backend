@@ -25,7 +25,7 @@ resources:
         GenerateSecret: false
         ExplicitAuthFlows:
           - ALLOW_USER_PASSWORD_AUTH
-          - REFRESH_TOKEN_AUTH
+          - ALLOW_REFRESH_TOKEN_AUTH
 
   Outputs:
     MainUserPoolArn:
