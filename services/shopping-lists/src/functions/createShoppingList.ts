@@ -1,10 +1,10 @@
-import { DynamoDB } from '@aws-sdk/client-dynamodb'
+import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb'
 import { marshall } from '@aws-sdk/util-dynamodb'
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
 import 'source-map-support/register';
 
-const dynamoDB = new DynamoDB({ apiVersion: '2012-08-10' });
+const dynamoDB = new DynamoDBClient({ apiVersion: '2012-08-10' });
 
 const handleErrorResponse = (error: Error) => {
   console.error(error)
@@ -33,7 +33,7 @@ export const createShoppingList: APIGatewayProxyHandler = async (event) => {
   };
 
   try {
-    await dynamoDB.putItem(params);
+    await dynamoDB.send(new PutItemCommand(params));
   } catch (e) {
     return handleErrorResponse(e);
   }
