@@ -1,0 +1,36 @@
+frameworkVersion: '2.18.0'
+
+org: mikitane
+app: shopping-lists-backend
+service: auth
+
+provider:
+  name: aws
+  region: eu-west-1
+
+resources:
+  Resources:
+    MainUserPool:
+      Type: 'AWS::Cognito::UserPool'
+      Properties:
+        UserPoolName: ${self:service}-${opt:stage}-MainUserPool
+        UsernameAttributes:
+          - phone_number
+          - email
+    MainUserPoolClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        ClientName: MainUserPoolClient
+        UserPoolId: !Ref MainUserPool
+        GenerateSecret: false
+        ExplicitAuthFlows:
+          - ALLOW_USER_PASSWORD_AUTH
+          - ALLOW_REFRESH_TOKEN_AUTH
+
+  Outputs:
+    MainUserPoolArn:
+      Value: !GetAtt MainUserPool.Arn
+      Export:
+        Name: ${self:service}-${opt:stage}-MainUserPool-Arn
+
+

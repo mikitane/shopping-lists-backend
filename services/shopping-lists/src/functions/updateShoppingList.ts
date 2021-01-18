@@ -1,7 +1,6 @@
 import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb'
 import { marshall } from '@aws-sdk/util-dynamodb'
 import { APIGatewayProxyHandler } from 'aws-lambda';
-import { v4 as uuidv4 } from 'uuid';
 import 'source-map-support/register';
 
 const dynamoDB = new DynamoDBClient({ apiVersion: '2012-08-10' });
@@ -11,16 +10,18 @@ const handleErrorResponse = (error: Error) => {
   return {
     statusCode: 400,
     body: JSON.stringify({
-      message: 'Failed to create a new shopping list'
+      message: 'Failed to modify shopping list'
     })
   };
 };
 
-export const createShoppingList: APIGatewayProxyHandler = async (event) => {
+
+// TODO: Use UpdateItemCommand. PutItemCommand replaces or creates a new item to Dynamo
+export const updateShoppingList: APIGatewayProxyHandler = async (event) => {
   console.log(event)
   const data = JSON.parse(event.body); // TODO: Validate schema
   const userId = event.requestContext.authorizer.claims['cognito:username']
-  const shoppingListId = uuidv4();
+  const shoppingListId = event.pathParameters.id;
 
   const params = {
     TableName: process.env.MAIN_TABLE,
@@ -41,9 +42,8 @@ export const createShoppingList: APIGatewayProxyHandler = async (event) => {
   return {
     statusCode: 201,
     body: JSON.stringify({
-      message: 'Created a new shopping list!',
+      message: 'Modified shopping list!',
       id: shoppingListId,
     }, null, 2),
   };
 }
-
