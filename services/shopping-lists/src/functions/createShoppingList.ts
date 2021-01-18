@@ -17,6 +17,7 @@ const handleErrorResponse = (error: Error) => {
 };
 
 export const createShoppingList: APIGatewayProxyHandler = async (event) => {
+  console.log(event)
   const data = JSON.parse(event.body); // TODO: Validate schema
   const userId = 'UNKNOWN' // TODO: Authorize user and get id
   const shoppingListId = uuidv4();
