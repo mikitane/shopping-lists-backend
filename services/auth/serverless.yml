@@ -23,6 +23,8 @@ resources:
         ClientName: MainUserPoolClient
         UserPoolId: !Ref MainUserPool
         GenerateSecret: false
+        ExplicitAuthFlows:
+          - ALLOW_USER_PASSWORD_AUTH
 
   Outputs:
     MainUserPoolArn:

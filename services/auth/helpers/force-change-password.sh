@@ -1,7 +1,7 @@
 # Initiate auth
 aws cognito-idp initiate-auth \
 --region eu-west-1 \
---client-id 4uunk2r3mqvat88767pdcd7a36 \
+--client-id 6vu4ivue0se57dqmgjci3ehkt \
 --auth-flow USER_PASSWORD_AUTH \
 --auth-parameters USERNAME=miika.luiro@outlook.com,PASSWORD=Jeejee123!
 
