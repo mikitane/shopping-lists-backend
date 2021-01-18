@@ -8,26 +8,26 @@ provider:
   name: aws
   region: eu-west-1
 
-resources:
-  Resources:
-    MainUserPool:
-      Type: 'AWS::Cognito::UserPool'
-      Properties:
-        UserPoolName: ${self:service}-${opt:stage}-MainUserPool
-        AliasAttributes:
-          - phone_number
-          - email
-    MainUserPoolClient:
-      Type: AWS::Cognito::UserPoolClient
-      Properties:
-        ClientName: MainUserPoolClient
-        UserPoolId: !Ref MainUserPool
-        GenerateSecret: false
+# resources:
+#   Resources:
+#     MainUserPool:
+#       Type: 'AWS::Cognito::UserPool'
+#       Properties:
+#         UserPoolName: ${self:service}-${opt:stage}-MainUserPool
+#         AliasAttributes:
+#           - phone_number
+#           - email
+#     MainUserPoolClient:
+#       Type: AWS::Cognito::UserPoolClient
+#       Properties:
+#         ClientName: MainUserPoolClient
+#         UserPoolId: !Ref MainUserPool
+#         GenerateSecret: false
 
-  Outputs:
-    MainUserPoolArn:
-      Value: !GetAtt MainUserPool.Arn
-      Export:
-        Name: ${self:service}-${opt:stage}-MainUserPool-Arn
+#   Outputs:
+#     MainUserPoolArn:
+#       Value: !GetAtt MainUserPool.Arn
+#       Export:
+#         Name: ${self:service}-${opt:stage}-MainUserPool-Arn
 
 
