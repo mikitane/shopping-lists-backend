@@ -16,7 +16,7 @@ const handleErrorResponse = (error: Error) => {
 };
 
 export const getShoppingList: APIGatewayProxyHandler = async (event) => {
-  const userId = 'UNKNOWN' // TODO: Authorize user and get id
+  const userId = event.requestContext.authorizer.claims['cognito:username']
   const shoppingListId = event.pathParameters.id;
 
   const params = {

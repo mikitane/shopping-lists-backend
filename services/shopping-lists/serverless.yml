@@ -58,6 +58,10 @@ functions:
       - http:
           method: get
           path: shopping-list/{id}
+          authorizer:
+            name: CognitoAuthorizer
+            type: COGNITO_USER_POOLS
+            arn: !ImportValue auth-${opt:stage}-MainUserPool-Arn
   # updateShoppingList:
   #   handler: 'src/functions/updateShoppingList.updateShoppingList'
   #   events:
