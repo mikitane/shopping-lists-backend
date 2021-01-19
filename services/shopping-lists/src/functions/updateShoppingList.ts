@@ -11,7 +11,7 @@ export const updateShoppingList: APIGatewayProxyHandler = async (event) => {
 
   const originalShoppingList = await getShoppingList(userId, shoppingListId);
 
-  if (!shoppingListId) return response(404, 'Shopping list not found!');
+  if (!originalShoppingList) return response(404, 'Shopping list not found!');
 
   await putShoppingList(
     { ...originalShoppingList, ...updatedShoppingList },
