@@ -11,7 +11,7 @@ export const createShoppingList: APIGatewayProxyHandler = async (event) => {
   const userId = event.requestContext.authorizer.claims['cognito:username']
 
   const shoppingListId = await putShoppingList(data, userId);
-
+  console.log('ShoppingListCreatedTopicArn', process.env.ShoppingListCreatedTopicArn)
   // Publish message to SNS
   const snsParams = {
     Message: JSON.stringify({ id: shoppingListId }),

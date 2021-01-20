@@ -23,6 +23,12 @@ provider:
         - dynamodb:PutItem
       Resource:
         - !ImportValue ${self:provider.environment.MAIN_TABLE}-Arn
+    - Effect: 'Allow'
+      Action:
+        - "sns:Publish"
+      Resource:
+        - !ImportValue ${self:custom.shoppingListAnalyticsOueueArn}
+
 
 custom:
   webpack:
