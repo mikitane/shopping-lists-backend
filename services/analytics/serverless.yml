@@ -1,0 +1,67 @@
+frameworkVersion: '2.18.0'
+
+org: mikitane
+app: shopping-lists-backend
+service: analytics
+
+provider:
+  name: aws
+  region: eu-west-1
+  runtime: nodejs12.x
+  apiGateway:
+    minimumCompressionSize: 1024
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
+    MAIN_TABLE: db-${opt:stage}-MainTable
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+      Resource:
+        - !ImportValue ${self:provider.environment.MAIN_TABLE}-Arn
+
+custom:
+  webpack:
+    webpackConfig: './webpack.config.js'
+    includeModules: true
+  region: ${opt:region, self:provider.region}
+  seed:
+    incremental:
+      enabled: true
+
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+  - serverless-seed
+
+functions:
+  updateShoppingListAnalytics:
+    handler: 'src/functions/updateShoppingListAnalytics.updateShoppingListAnalytics'
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - ShoppingListAnalyticsQueue
+              - Arn
+
+resources:
+  Resources:
+    ShoppingListAnalyticsQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+          QueueName: analytics-${opt:stage}-shoppingListAnalyticsOueue
+
+  Outputs:
+    ShoppingListAnalyticsQueueArn:
+      Value: !GetAtt ShoppingListAnalyticsQueue.Arn
+      Export:
+        Name: analytics-${opt:stage}-shoppingListAnalyticsOueue-Arn
+    ShoppingListAnalyticsQueueUrl:
+      Value: !Ref ShoppingListAnalyticsQueue
+      Export:
+        Name: analytics-${opt:stage}-shoppingListAnalyticsQueue-Url

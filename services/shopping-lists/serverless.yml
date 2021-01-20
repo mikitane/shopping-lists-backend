@@ -13,7 +13,6 @@ provider:
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
     MAIN_TABLE: db-${opt:stage}-MainTable
-    # AWS_REGION: ${self:custom.region}
 
   iamRoleStatements:
     - Effect: "Allow"
@@ -24,16 +23,24 @@ provider:
         - dynamodb:PutItem
       Resource:
         - !ImportValue ${self:provider.environment.MAIN_TABLE}-Arn
-        # - ${cf:${self:provider.environment.DB_SERVICE}.MainTableArn}
+    - Effect: 'Allow'
+      Action:
+        - "sns:Publish"
+      Resource:
+        - !Ref ShoppingListCreatedTopic
+
 
 custom:
   webpack:
     webpackConfig: './webpack.config.js'
     includeModules: true
-  region: ${opt:region, self:provider.region}
   seed:
     incremental:
       enabled: true
+  region: ${opt:region, self:provider.region}
+  mainUserPoolArn: auth-${opt:stage}-MainUserPool-Arn
+  shoppingListAnalyticsOueueArn: analytics-${opt:stage}-shoppingListAnalyticsOueue-Arn
+  shoppingListAnalyticsQueueUrl: analytics-${opt:stage}-shoppingListAnalyticsQueue-Url
 
 plugins:
   - serverless-webpack
@@ -43,6 +50,8 @@ plugins:
 functions:
   createShoppingList:
     handler: 'src/functions/createShoppingList.createShoppingList'
+    environment:
+      ShoppingListCreatedTopicArn: !Ref ShoppingListCreatedTopic
     events:
       - http:
           method: post
@@ -50,7 +59,7 @@ functions:
           authorizer:
             name: CognitoAuthorizer
             type: COGNITO_USER_POOLS
-            arn: !ImportValue auth-${opt:stage}-MainUserPool-Arn
+            arn: !ImportValue ${self:custom.mainUserPoolArn}
 
   getShoppingList:
     handler: 'src/functions/getShoppingList.getShoppingList'
@@ -61,7 +70,8 @@ functions:
           authorizer:
             name: CognitoAuthorizer
             type: COGNITO_USER_POOLS
-            arn: !ImportValue auth-${opt:stage}-MainUserPool-Arn
+            arn: !ImportValue ${self:custom.mainUserPoolArn}
+
   updateShoppingList:
     handler: 'src/functions/updateShoppingList.updateShoppingList'
     events:
@@ -71,4 +81,35 @@ functions:
           authorizer:
             name: CognitoAuthorizer
             type: COGNITO_USER_POOLS
-            arn: !ImportValue auth-${opt:stage}-MainUserPool-Arn
+            arn: !ImportValue ${self:custom.mainUserPoolArn}
+
+resources:
+  Resources:
+    ShoppingListCreatedTopic:
+      Type: 'AWS::SNS::Topic'
+
+    # TODO: Maybe move these to analytics serverless.yml?
+    ShoppingListCreatedAnalyticsSubscription:
+      Type: 'AWS::SNS::Subscription'
+      Properties:
+        TopicArn: !Ref ShoppingListCreatedTopic
+        Endpoint: !ImportValue ${self:custom.shoppingListAnalyticsOueueArn}
+        Protocol: sqs
+        RawMessageDelivery: 'true'
+
+    ShoppingListCreatedAnalyticsQueuePolicy:
+      Type: AWS::SQS::QueuePolicy
+      Properties:
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Sid: "allow-sns-messages"
+              Effect: Allow
+              Principal: "*"
+              Resource: !ImportValue ${self:custom.shoppingListAnalyticsOueueArn}
+              Action: "SQS:SendMessage"
+              Condition:
+                ArnEquals:
+                  "aws:SourceArn": !Ref ShoppingListCreatedTopic
+        Queues:
+          - !ImportValue ${self:custom.shoppingListAnalyticsQueueUrl}
