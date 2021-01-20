@@ -33,7 +33,7 @@ custom:
       enabled: true
   region: ${opt:region, self:provider.region}
   mainUserPoolArn: auth-${opt:stage}-MainUserPool-Arn
-  analyticsOueueArn: analytics-${opt:stage}-shoppingListAnalyticsOueue-Arn
+  shoppingListAnalyticsOueueArn: analytics-${opt:stage}-shoppingListAnalyticsOueue-Arn
 
 plugins:
   - serverless-webpack
@@ -43,6 +43,8 @@ plugins:
 functions:
   createShoppingList:
     handler: 'src/functions/createShoppingList.createShoppingList'
+    # environment:
+    #   ShoppingListCreatedTopicArn: !Ref ShoppingListCreatedTopic
     events:
       - http:
           method: post
