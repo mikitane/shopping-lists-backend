@@ -5,19 +5,8 @@ import 'source-map-support/register';
 
 // const dynamoDB = new DynamoDBClient({ apiVersion: '2012-08-10' });
 
-// const handleErrorResponse = (error: Error) => {
-//   console.error(error)
-//   return {
-//     statusCode: 400,
-//     body: JSON.stringify({
-//       message: 'Failed to modify shopping list'
-//     })
-//   };
-// };
-
-
-export const updateShoppingListAnalytics: APIGatewayProxyHandler = async () => {
-
+export const updateShoppingListAnalytics: APIGatewayProxyHandler = async (event) => {
+  console.log(event)
   return {
     statusCode: 201,
     body: JSON.stringify({

@@ -33,6 +33,7 @@ custom:
     incremental:
       enabled: true
 
+
 plugins:
   - serverless-webpack
   - serverless-offline
@@ -42,4 +43,17 @@ functions:
   updateShoppingListAnalytics:
     handler: 'src/functions/updateShoppingListAnalytics.updateShoppingListAnalytics'
     events:
-      - sns: shopping-list-created
+      - sqs: !GetAtt ShoppingListAnalyticsQueue.Arn
+
+resources:
+  Resources:
+    ShoppingListAnalyticsQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+          QueueName: analytics-${opt:stage}-shoppingListAnalyticsOueue
+
+  Outputs:
+    ShoppingListAnalyticsQueueArn:
+      Value: !GetAtt ShoppingListAnalyticsQueue.Arn
+      Export:
+        Name: analytics-${opt:stage}-shoppingListAnalyticsOueue-Arn
