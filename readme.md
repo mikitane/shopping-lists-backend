@@ -1,1 +1,1 @@
-Game Stats Backend
+Shopping Lists App
