@@ -1,16 +1,12 @@
-// import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb'
-// import { marshall } from '@aws-sdk/util-dynamodb'
-import { APIGatewayProxyHandler } from 'aws-lambda';
 import 'source-map-support/register';
 
-// const dynamoDB = new DynamoDBClient({ apiVersion: '2012-08-10' });
+// TODO: Update analytics to DynamoDB etc.
+// Current implementation is just for testing SNS and SQS
+export const updateShoppingListAnalytics = async (event) => {
 
-export const updateShoppingListAnalytics: APIGatewayProxyHandler = async (event) => {
-  console.log(event)
-  return {
-    statusCode: 201,
-    body: JSON.stringify({
-      message: 'Update shopping list analytics',
-    }, null, 2),
-  };
+  event.Records.forEach(record => {
+    console.log(`New shopping list created with id: ${record.body.id}`)
+  });
+
+  return {};
 }
