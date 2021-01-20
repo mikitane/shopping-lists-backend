@@ -112,4 +112,4 @@ resources:
                 ArnEquals:
                   "aws:SourceArn": !Ref ShoppingListCreatedTopic
         Queues:
-          - Ref: ${self:custom.shoppingListAnalyticsQueueUrl}
+          - !ImportValue ${self:custom.shoppingListAnalyticsQueueUrl}
