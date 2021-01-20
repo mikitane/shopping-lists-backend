@@ -44,10 +44,10 @@ functions:
     handler: 'src/functions/updateShoppingListAnalytics.updateShoppingListAnalytics'
     events:
       - sqs:
-        arn:
-          Fn::GetAtt:
-            - ShoppingListAnalyticsQueue
-            - Arn
+          arn:
+            Fn::GetAtt:
+              - ShoppingListAnalyticsQueue
+              - Arn
 
 resources:
   Resources:
