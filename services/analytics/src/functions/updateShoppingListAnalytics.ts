@@ -5,7 +5,8 @@ import 'source-map-support/register';
 export const updateShoppingListAnalytics = async (event) => {
 
   event.Records.forEach(record => {
-    console.log(`New shopping list created with id: ${record.body.id}`)
+    const data = JSON.parse(record.body);
+    console.log(`New shopping list created with id: ${data.id}`)
   });
 
   return {};
