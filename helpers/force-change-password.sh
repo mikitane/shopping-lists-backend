@@ -1,14 +1,14 @@
 # Initiate auth
 aws cognito-idp initiate-auth \
 --region eu-west-1 \
---client-id 6vu4ivue0se57dqmgjci3ehkt \
+--client-id 7mlb9r6te77telhh3bi3ni57if \
 --auth-flow USER_PASSWORD_AUTH \
---auth-parameters USERNAME=miika.luiro@outlook.com,PASSWORD=Jeejee123!
+--auth-parameters USERNAME=miika.luiro@outlook.com,PASSWORD=xxxx
 
 # Respond to auth challenge
 aws cognito-idp respond-to-auth-challenge \
 --region eu-west-1 \
---client-id 6vu4ivue0se57dqmgjci3ehkt \
+--client-id 7mlb9r6te77telhh3bi3ni57if \
 --challenge-name NEW_PASSWORD_REQUIRED \
---challenge-responses USERNAME=miika.luiro@outlook.com,NEW_PASSWORD=Joojoo123! \
---session AYABeLzds0IJpZ-13cUclRYwB6QAHQABAAdTZXJ2aWNlABBDb2duaXRvVXNlclBvb2xzAAEAB2F3cy1rbXMAS2Fybjphd3M6a21zOmV1LXdlc3QtMTo0NTU0NTg0OTMwODE6a2V5L2FiN2U3M2UzLWU2NDEtNDk5Zi1iNzc0LWZkZmM1MWM3NzFhYQC4AQIBAHgZx_zsnwnwxd0Kjufbdq-GGiw-qKt3QHva7sj-Wc-v8gHQxoibvCMpQTKbRDT0xDscAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMFsOpabwwqX4VYB5JAgEQgDtgcUc_WoiIZnQZadRYQRsx0cvASJofT2zB6UMWwebkQk097Evp53pd5A2vtmX86-dGEe8fXQYN2GntGwIAAAAADAAAEAAAAAAAAAAAAAAAAAC_spOQZjtBMLwDoC2syf8a_____wAAAAEAAAAAAAAAAAAAAAEAAADob5Hh34IcaFAROvJyiYpFKb6BK6M-A61sZDCLYXfwBzyCd9oECwv065RDQFqagtSQovRPPf03qzqcYhKW0gLFFZOpHJ1Onjdg-id9nfYyyPsuVNb40Kd_Uw2iXOrJ17xvwRt1yQ530bSpBdtIp6SIjbEo9z5pq1wl3tdFIOBosLoWpvmWMKwKz6XjPvs6R3g88QDiVZ339W-0dlb12wK42ereGhqBH2NdCO93sA7KQYqn-QNEBlPi6obUELgoIawvyW4xFpKpNV-lGpeV1lk3lslOaq0plZ57m_rb2mMPwpQfJGyRGRvHPmHoNZiUx0dvMndnquJrnXk
+--challenge-responses USERNAME=miika.luiro@outlook.com,NEW_PASSWORD=xxxx \
+--session xxxx
