@@ -18,7 +18,9 @@ export const createShoppingList: APIGatewayProxyHandler = async (event) => {
     TopicArn: process.env.ShoppingListCreatedTopicArn,
   };
 
-  await sns.send(new PublishCommand(snsParams));
+  const someting = await sns.send(new PublishCommand(snsParams));
+  console.log('someting')
+  console.log(someting)
 
   return response(201, {
     id: shoppingListId
