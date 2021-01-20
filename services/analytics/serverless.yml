@@ -43,7 +43,11 @@ functions:
   updateShoppingListAnalytics:
     handler: 'src/functions/updateShoppingListAnalytics.updateShoppingListAnalytics'
     events:
-      - sqs: !GetAtt ShoppingListAnalyticsQueue.Arn
+      - sqs:
+        arn:
+          Fn::GetAtt:
+            - ShoppingListAnalyticsQueue
+            - Arn
 
 resources:
   Resources:
