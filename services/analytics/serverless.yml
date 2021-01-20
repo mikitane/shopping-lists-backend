@@ -61,3 +61,7 @@ resources:
       Value: !GetAtt ShoppingListAnalyticsQueue.Arn
       Export:
         Name: analytics-${opt:stage}-shoppingListAnalyticsOueue-Arn
+    ShoppingListAnalyticsQueueUrl:
+      Value: !Ref ShoppingListAnalyticsQueue
+      Export:
+        Name: analytics-${opt:stage}-shoppingListAnalyticsOueue-Url

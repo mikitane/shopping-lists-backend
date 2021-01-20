@@ -40,6 +40,7 @@ custom:
   region: ${opt:region, self:provider.region}
   mainUserPoolArn: auth-${opt:stage}-MainUserPool-Arn
   shoppingListAnalyticsOueueArn: analytics-${opt:stage}-shoppingListAnalyticsOueue-Arn
+  shoppingListAnalyticsQueueUrl: analytics-${opt:stage}-shoppingListAnalyticsQueue-Url
 
 plugins:
   - serverless-webpack
@@ -86,6 +87,8 @@ resources:
   Resources:
     ShoppingListCreatedTopic:
       Type: 'AWS::SNS::Topic'
+
+    # TODO: Maybe move these to analytics serverless.yml?
     ShoppingListCreatedAnalyticsSubscription:
       Type: 'AWS::SNS::Subscription'
       Properties:
@@ -93,3 +96,20 @@ resources:
         Endpoint: !ImportValue ${self:custom.shoppingListAnalyticsOueueArn}
         Protocol: sqs
         RawMessageDelivery: 'true'
+
+    ShoppingListCreatedAnalyticsQueuePolicy:
+      Type: AWS::SQS::QueuePolicy
+      Properties:
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Sid: "allow-sns-messages"
+              Effect: Allow
+              Principal: "*"
+              Resource: !ImportValue ${self:custom.shoppingListAnalyticsOueueArn}
+              Action: "SQS:SendMessage"
+              Condition:
+                ArnEquals:
+                  "aws:SourceArn": !Ref ShoppingListCreatedTopic
+        Queues:
+          - Ref: ${self:custom.shoppingListAnalyticsQueueUrl}
