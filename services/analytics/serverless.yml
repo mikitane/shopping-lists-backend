@@ -64,4 +64,4 @@ resources:
     ShoppingListAnalyticsQueueUrl:
       Value: !Ref ShoppingListAnalyticsQueue
       Export:
-        Name: analytics-${opt:stage}-shoppingListAnalyticsOueue-Url
+        Name: analytics-${opt:stage}-shoppingListAnalyticsQueue-Url
