@@ -43,8 +43,8 @@ plugins:
 functions:
   createShoppingList:
     handler: 'src/functions/createShoppingList.createShoppingList'
-    # environment:
-    #   ShoppingListCreatedTopicArn: !Ref ShoppingListCreatedTopic
+    environment:
+      ShoppingListCreatedTopicArn: !Ref ShoppingListCreatedTopic
     events:
       - http:
           method: post
