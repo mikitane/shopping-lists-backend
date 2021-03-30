@@ -1,4 +1,4 @@
-import { GetItemCommand, PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
+import { PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import dynamoDB from './index';
 import { Product } from './product';
@@ -11,22 +11,13 @@ type ShoppingList = {
   products: Product[]
 }
 
-type NullableShoppingList = ShoppingList | null;
+type InternalShoppingList = ShoppingList & {
+  pk: string,
+  sk: string,
+}
 
-
-export const getShoppingList = async (userId: string, shoppingListId: string): Promise<NullableShoppingList> => {
-  const params = {
-    TableName: process.env.MAIN_TABLE,
-    Key: marshall({
-      pk: `USER#${userId}`,
-      sk: `SHOPPINGLIST#${shoppingListId}`,
-    })
-  };
-
-  const { Item } = await dynamoDB.send(new GetItemCommand(params));
-
-  return Item ? unmarshall(Item) as ShoppingList : null;
-};
+// type NullableShoppingList = ShoppingList | null;
+// type NullableInternalShoppingList = InternalShoppingList | null;
 
 export const getShoppingListsByUserId = async (userId: string): Promise<ShoppingList[]> => {
   const params = {
@@ -40,14 +31,23 @@ export const getShoppingListsByUserId = async (userId: string): Promise<Shopping
 
   const { Items } = await dynamoDB.send(new QueryCommand(params));
 
-  return Items ? Items.map(item => unmarshall(item)) as ShoppingList[] : [];
+  if (!Items) return [];
+
+  const shoppingLists = Items.map(item => {
+    const shoppingList = unmarshall(item) as InternalShoppingList
+    delete shoppingList.pk;
+    delete shoppingList.sk;
+    return shoppingList as ShoppingList;
+  });
+
+  return shoppingLists;
 };
 
 
 export const putShoppingList = async (data: Record<string, unknown>, userId: string): Promise<string> => {
   const shoppingListId = data.id;
 
-  if (typeof shoppingListId !== 'string' || !shoppingListId) {
+  if (typeof shoppingListId !== 'string' || !shoppingListId) {
     throw Error('putShoppingList: No id found shoppingList data');
   }
 

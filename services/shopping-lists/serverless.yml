@@ -48,8 +48,8 @@ plugins:
   - serverless-seed
 
 functions:
-  createShoppingList:
-    handler: 'src/functions/createShoppingList.createShoppingList'
+  postShoppingLists:
+    handler: 'src/functions/postShoppingLists.postShoppingLists'
     environment:
       ShoppingListCreatedTopicArn: !Ref ShoppingListCreatedTopic
     events:
@@ -61,34 +61,12 @@ functions:
             type: COGNITO_USER_POOLS
             arn: !ImportValue ${self:custom.mainUserPoolArn}
 
-  getShoppingList:
-    handler: 'src/functions/getShoppingList.getShoppingList'
-    events:
-      - http:
-          method: get
-          path: shopping-list/{id}
-          authorizer:
-            name: CognitoAuthorizer
-            type: COGNITO_USER_POOLS
-            arn: !ImportValue ${self:custom.mainUserPoolArn}
-
   getShoppingLists:
     handler: 'src/functions/getShoppingLists.getShoppingLists'
     events:
       - http:
           method: get
           path: shopping-list
-          authorizer:
-            name: CognitoAuthorizer
-            type: COGNITO_USER_POOLS
-            arn: !ImportValue ${self:custom.mainUserPoolArn}
-
-  updateShoppingList:
-    handler: 'src/functions/updateShoppingList.updateShoppingList'
-    events:
-      - http:
-          method: put
-          path: shopping-list/{id}
           authorizer:
             name: CognitoAuthorizer
             type: COGNITO_USER_POOLS
