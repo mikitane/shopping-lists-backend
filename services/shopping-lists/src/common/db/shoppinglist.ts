@@ -1,4 +1,4 @@
-import { GetItemCommand, PutItemCommand } from '@aws-sdk/client-dynamodb';
+import { GetItemCommand, PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { v4 as uuidv4 } from 'uuid';
 import dynamoDB from './index';
@@ -27,6 +27,20 @@ export const getShoppingList = async (userId: string, shoppingListId: string): P
   const { Item } = await dynamoDB.send(new GetItemCommand(params));
 
   return Item ? unmarshall(Item) as ShoppingList : null;
+};
+
+export const getShoppingListsByUserId = async (userId: string): Promise<ShoppingList[]> => {
+  const params = {
+    TableName: process.env.MAIN_TABLE,
+    KeyConditionExpression: "pk = :pk",
+    ExpressionAttributeValues: marshall({
+      pk: `USER#${userId}`,
+    }),
+  };
+
+  const { Items } = await dynamoDB.send(new QueryCommand(params));
+
+  return Items ? Items.map(item => unmarshall(item)) as ShoppingList[] : [];
 };
 
 

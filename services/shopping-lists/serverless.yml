@@ -72,6 +72,17 @@ functions:
             type: COGNITO_USER_POOLS
             arn: !ImportValue ${self:custom.mainUserPoolArn}
 
+  getShoppingList:
+    handler: 'src/functions/getShoppingLists.getShoppingLists'
+    events:
+      - http:
+          method: get
+          path: shopping-list
+          authorizer:
+            name: CognitoAuthorizer
+            type: COGNITO_USER_POOLS
+            arn: !ImportValue ${self:custom.mainUserPoolArn}
+
   updateShoppingList:
     handler: 'src/functions/updateShoppingList.updateShoppingList'
     events:
