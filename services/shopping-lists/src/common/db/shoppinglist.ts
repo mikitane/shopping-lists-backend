@@ -32,9 +32,10 @@ export const getShoppingList = async (userId: string, shoppingListId: string): P
 export const getShoppingListsByUserId = async (userId: string): Promise<ShoppingList[]> => {
   const params = {
     TableName: process.env.MAIN_TABLE,
-    KeyConditionExpression: "pk = :pk",
+    KeyConditionExpression: "pk = :pk and begins_with(sk, :sk)",
     ExpressionAttributeValues: marshall({
       ':pk': `USER#${userId}`,
+      ':sk': 'SHOPPINGLIST#'
     }),
   };
 
