@@ -72,7 +72,7 @@ functions:
             type: COGNITO_USER_POOLS
             arn: !ImportValue ${self:custom.mainUserPoolArn}
 
-  getShoppingList:
+  getShoppingLists:
     handler: 'src/functions/getShoppingLists.getShoppingLists'
     events:
       - http:
