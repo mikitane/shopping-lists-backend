@@ -16,7 +16,6 @@ export const updateShoppingList: APIGatewayProxyHandler = async (event) => {
   await putShoppingList(
     { ...originalShoppingList, ...updatedShoppingList },
     userId,
-    shoppingListId
   );
 
   return response(200, {

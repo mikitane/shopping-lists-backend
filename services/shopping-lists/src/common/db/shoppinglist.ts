@@ -45,13 +45,18 @@ export const getShoppingListsByUserId = async (userId: string): Promise<Shopping
 };
 
 
-export const putShoppingList = async (data: Record<string, unknown>, userId: string, shoppingListId = uuidv4()): Promise<string> => {
+export const putShoppingList = async (data: Record<string, unknown>, userId: string): Promise<string> => {
+  const shoppingListId = data.id;
+
+  if (typeof shoppingListId !== 'string' || !shoppingListId) {
+    throw Error('putShoppingList: No id found shoppingList data');
+  }
+
   const params = {
     TableName: process.env.MAIN_TABLE,
     Item: marshall({
       pk: `USER#${userId}`,
       sk: `SHOPPINGLIST#${shoppingListId}`,
-      id: shoppingListId,
       ...data
     })
   };
