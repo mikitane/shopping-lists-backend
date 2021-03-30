@@ -34,7 +34,7 @@ export const getShoppingListsByUserId = async (userId: string): Promise<Shopping
     TableName: process.env.MAIN_TABLE,
     KeyConditionExpression: "pk = :pk",
     ExpressionAttributeValues: marshall({
-      pk: `USER#${userId}`,
+      ':pk': `USER#${userId}`,
     }),
   };
 
