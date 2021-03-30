@@ -3,7 +3,7 @@ import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import dynamoDB from './index';
 import { Product } from './product';
 
-type ShoppingList = {
+export type ShoppingList = {
   pk: string,
   sk: string,
   id: string,
@@ -11,13 +11,13 @@ type ShoppingList = {
   products: Product[]
 }
 
-type InternalShoppingList = ShoppingList & {
+export type InternalShoppingList = ShoppingList & {
   pk: string,
   sk: string,
 }
 
-// type NullableShoppingList = ShoppingList | null;
-// type NullableInternalShoppingList = InternalShoppingList | null;
+// export type NullableShoppingList = ShoppingList | null;
+// export type NullableInternalShoppingList = InternalShoppingList | null;
 
 export const getShoppingListsByUserId = async (userId: string): Promise<ShoppingList[]> => {
   const params = {
