@@ -8,6 +8,17 @@ provider:
   name: aws
   region: eu-west-1
 
+functions:
+  refreshTokens:
+    handler: 'src/functions/refreshTokens.refreshTokens'
+    environment:
+      AdminMainUserPoolClientId: !Ref AdminMainUserPoolClient
+      AdminMainUserPoolClientSecret: !GetAtt AdminMainUserPoolClient.ClientSecret
+    events:
+      - http:
+          method: post
+          path: refresh-token
+
 resources:
   Resources:
     MainUserPool:
@@ -26,6 +37,14 @@ resources:
         ExplicitAuthFlows:
           - ALLOW_USER_PASSWORD_AUTH
           - ALLOW_REFRESH_TOKEN_AUTH
+    AdminMainUserPoolClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        ClientName: AdminMainUserPoolClient
+        UserPoolId: !Ref MainUserPool
+        GenerateSecret: true
+        ExplicitAuthFlows:
+          - ALLOW_ADMIN_USER_PASSWORD_AUTH
 
   Outputs:
     MainUserPoolArn:
