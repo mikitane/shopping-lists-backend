@@ -38,7 +38,7 @@ custom:
     incremental:
       enabled: true
   customDomain:
-    domainName: api.mikitane-shopping-lists.com
+    domainName: '${opt:stage}-api.mikitane-shopping-lists.com'
     basePath: 'shopping-list'
     stage: ${opt:stage}
     certificateName: '*.mikitane-shopping-lists.com'
