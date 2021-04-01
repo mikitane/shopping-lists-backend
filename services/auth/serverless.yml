@@ -7,6 +7,19 @@ service: auth
 provider:
   name: aws
   region: eu-west-1
+  runtime: nodejs12.x
+  apiGateway:
+    minimumCompressionSize: 1024
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
+
+custom:
+  webpack:
+    webpackConfig: './webpack.config.js'
+    includeModules: true
+  seed:
+    incremental:
+      enabled: true
 
 functions:
   refreshTokens:
