@@ -13,7 +13,6 @@
     "source-map-support": "^0.5.19"
   },
   "devDependencies": {
-    "serverless": "^2.18.0",
     "@serverless/typescript": "^2.12.0",
     "@types/aws-lambda": "^8.10.64",
     "@types/node": "^14.14.6",
@@ -21,6 +20,8 @@
     "@typescript-eslint/parser": "^4.12.0",
     "eslint": "^7.17.0",
     "fork-ts-checker-webpack-plugin": "^6.0.0",
+    "serverless": "^2.18.0",
+    "serverless-domain-manager": "^5.1.0",
     "serverless-offline": "^6.8.0",
     "serverless-seed": "^0.3.13",
     "serverless-webpack": "^5.2.0",

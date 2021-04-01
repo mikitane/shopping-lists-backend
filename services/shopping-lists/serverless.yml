@@ -37,6 +37,12 @@ custom:
   seed:
     incremental:
       enabled: true
+  customDomain:
+    domainName: api.mikitane-shopping-lists.com
+    basePath: 'shopping-list'
+    stage: ${self:provider.stage}
+    certificateName: '*.mikitane-shopping-lists.com'
+    createRoute53Record: true
   region: ${opt:region, self:provider.region}
   mainUserPoolArn: auth-${opt:stage}-MainUserPool-Arn
   shoppingListAnalyticsOueueArn: analytics-${opt:stage}-shoppingListAnalyticsOueue-Arn
@@ -55,7 +61,7 @@ functions:
     events:
       - http:
           method: post
-          path: shopping-list
+          path: '/'
           authorizer:
             name: CognitoAuthorizer
             type: COGNITO_USER_POOLS
@@ -66,7 +72,7 @@ functions:
     events:
       - http:
           method: get
-          path: shopping-list
+          path: '/'
           authorizer:
             name: CognitoAuthorizer
             type: COGNITO_USER_POOLS
