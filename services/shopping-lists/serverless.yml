@@ -40,7 +40,7 @@ custom:
   customDomain:
     domainName: api.mikitane-shopping-lists.com
     basePath: 'shopping-list'
-    stage: ${self:provider.stage}
+    stage: ${opt:stage}
     certificateName: '*.mikitane-shopping-lists.com'
     createRoute53Record: true
   region: ${opt:region, self:provider.region}
