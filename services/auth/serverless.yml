@@ -30,49 +30,49 @@ custom:
     certificateName: '*.mikitane-shopping-lists.com'
     createRoute53Record: true
 
-# functions:
-#   refreshTokens:
-#     handler: 'src/functions/refreshTokens.refreshTokens'
-#     environment:
-#       AdminMainUserPoolClientId: !Ref AdminMainUserPoolClient
-#       AdminMainUserPoolClientSecret: !GetAtt AdminMainUserPoolClient.ClientSecret
-#     events:
-#       - http:
-#           method: post
-#           path: refresh-token
+functions:
+  refreshTokens:
+    handler: 'src/functions/refreshTokens.refreshTokens'
+    environment:
+      AdminMainUserPoolClientId: !Ref AdminMainUserPoolClient
+      AdminMainUserPoolClientSecret: !GetAtt AdminMainUserPoolClient.ClientSecret
+    events:
+      - http:
+          method: post
+          path: refresh-token
 
-# resources:
-#   Resources:
-#     MainUserPool:
-#       Type: 'AWS::Cognito::UserPool'
-#       Properties:
-#         UserPoolName: ${self:service}-${opt:stage}-MainUserPool
-#         UsernameAttributes:
-#           - phone_number
-#           - email
-#     MainUserPoolClient:
-#       Type: AWS::Cognito::UserPoolClient
-#       Properties:
-#         ClientName: MainUserPoolClient
-#         UserPoolId: !Ref MainUserPool
-#         GenerateSecret: false
-#         ExplicitAuthFlows:
-#           - ALLOW_USER_PASSWORD_AUTH
-#           - ALLOW_REFRESH_TOKEN_AUTH
-#     AdminMainUserPoolClient:
-#       Type: AWS::Cognito::UserPoolClient
-#       Properties:
-#         ClientName: AdminMainUserPoolClient
-#         UserPoolId: !Ref MainUserPool
-#         GenerateSecret: true
-#         ExplicitAuthFlows:
-#           - ALLOW_ADMIN_USER_PASSWORD_AUTH
-#           - ALLOW_REFRESH_TOKEN_AUTH
+resources:
+  Resources:
+    MainUserPool:
+      Type: 'AWS::Cognito::UserPool'
+      Properties:
+        UserPoolName: ${self:service}-${opt:stage}-MainUserPool
+        UsernameAttributes:
+          - phone_number
+          - email
+    MainUserPoolClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        ClientName: MainUserPoolClient
+        UserPoolId: !Ref MainUserPool
+        GenerateSecret: false
+        ExplicitAuthFlows:
+          - ALLOW_USER_PASSWORD_AUTH
+          - ALLOW_REFRESH_TOKEN_AUTH
+    AdminMainUserPoolClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        ClientName: AdminMainUserPoolClient
+        UserPoolId: !Ref MainUserPool
+        GenerateSecret: true
+        ExplicitAuthFlows:
+          - ALLOW_ADMIN_USER_PASSWORD_AUTH
+          - ALLOW_REFRESH_TOKEN_AUTH
 
-#   Outputs:
-#     MainUserPoolArn:
-#       Value: !GetAtt MainUserPool.Arn
-#       Export:
-#         Name: ${self:service}-${opt:stage}-MainUserPool-Arn
+  Outputs:
+    MainUserPoolArn:
+      Value: !GetAtt MainUserPool.Arn
+      Export:
+        Name: ${self:service}-${opt:stage}-MainUserPool-Arn
 
 
