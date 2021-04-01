@@ -1,10 +1,9 @@
-import { GetItemCommand, PutItemCommand } from '@aws-sdk/client-dynamodb';
+import { PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
-import { v4 as uuidv4 } from 'uuid';
 import dynamoDB from './index';
 import { Product } from './product';
 
-type ShoppingList = {
+export type ShoppingList = {
   pk: string,
   sk: string,
   id: string,
@@ -12,31 +11,51 @@ type ShoppingList = {
   products: Product[]
 }
 
-type NullableShoppingList = ShoppingList | null;
+export type InternalShoppingList = ShoppingList & {
+  pk: string,
+  sk: string,
+}
 
+// export type NullableShoppingList = ShoppingList | null;
+// export type NullableInternalShoppingList = InternalShoppingList | null;
 
-export const getShoppingList = async (userId: string, shoppingListId: string): Promise<NullableShoppingList> => {
+export const getShoppingListsByUserId = async (userId: string): Promise<ShoppingList[]> => {
   const params = {
     TableName: process.env.MAIN_TABLE,
-    Key: marshall({
-      pk: `USER#${userId}`,
-      sk: `SHOPPINGLIST#${shoppingListId}`,
-    })
+    KeyConditionExpression: "pk = :pk and begins_with(sk, :sk)",
+    ExpressionAttributeValues: marshall({
+      ':pk': `USER#${userId}`,
+      ':sk': 'SHOPPINGLIST#'
+    }),
   };
 
-  const { Item } = await dynamoDB.send(new GetItemCommand(params));
+  const { Items } = await dynamoDB.send(new QueryCommand(params));
 
-  return Item ? unmarshall(Item) as ShoppingList : null;
+  if (!Items) return [];
+
+  const shoppingLists = Items.map(item => {
+    const shoppingList = unmarshall(item) as InternalShoppingList
+    delete shoppingList.pk;
+    delete shoppingList.sk;
+    return shoppingList as ShoppingList;
+  });
+
+  return shoppingLists;
 };
 
 
-export const putShoppingList = async (data: Record<string, unknown>, userId: string, shoppingListId = uuidv4()): Promise<string> => {
+export const putShoppingList = async (data: Record<string, unknown>, userId: string): Promise<string> => {
+  const shoppingListId = data.id;
+
+  if (typeof shoppingListId !== 'string' || !shoppingListId) {
+    throw Error('putShoppingList: No id found shoppingList data');
+  }
+
   const params = {
     TableName: process.env.MAIN_TABLE,
     Item: marshall({
       pk: `USER#${userId}`,
       sk: `SHOPPINGLIST#${shoppingListId}`,
-      id: shoppingListId,
       ...data
     })
   };
